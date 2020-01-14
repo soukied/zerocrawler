@@ -7,6 +7,7 @@ import urllib.parse
 import re
 
 homesite = "https://www.zerochan.net"
+outdir = "IMAGES"
 
 last_filename = None
 
@@ -34,14 +35,14 @@ def getSite(url):
 
 def downloadFile(url,name):
     global last_filename
-    if not (path.exists("IMAGES") and path.isdir("IMAGES")):
-        os.mkdir("IMAGES")
+    if not (path.exists(outdir) and path.isdir(outdir)):
+        os.mkdir(outdir)
     filename = path.basename(url)
     print("[*] Downloading \"" + name + "\" image...")
-    if is_exist("IMAGES/" + filename):
+    if is_exist(outdir + "/" + filename):
         print("[*] File with same name exist, the program will skip this step.")
         return
-    with open("IMAGES/" + filename, "wb") as f:
+    with open(outdir + "/" + filename, "wb") as f:
         last_filename = filename
         f.write(requests.get(url).content)
     print("[*] Download completed")
