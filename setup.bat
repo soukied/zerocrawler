@@ -1,0 +1,3 @@
+@echo off
+echo Installing development dependencies...
+python -m pip install -r requirements.txt && echo Finished!

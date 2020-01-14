@@ -1,0 +1,3 @@
+@echo off
+echo Building 'zerocrawler.exe' execute file...
+pyinstaller --name zerocrawler -F zerocrawler.py && echo Finished!
