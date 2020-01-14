@@ -9,13 +9,12 @@ import re
 homesite = "https://www.zerochan.net"
 
 last_filename = None
-skip_files = False
 
 def is_exist(fn):
     return path.exists(fn) and path.isfile(fn)
 
 def getPages():
-    global query
+    global s_query
     num = ""
     site = getSite(homesite + "/" + s_query)
     p = site.find("p", class_="pagination")
@@ -35,7 +34,6 @@ def getSite(url):
 
 def downloadFile(url,name):
     global last_filename
-    global skip_files
     if not (path.exists("IMAGES") and path.isdir("IMAGES")):
         os.mkdir("IMAGES")
     filename = path.basename(url)
