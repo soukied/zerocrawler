@@ -1,4 +1,4 @@
-# zerocrawler
+# Zerocrawler
 
 Zerocrawler is a program that I created as a side project for learning web scrapping.
 Zerocrawler is an automated images or wallpapers downloader for website [Zerochan](https://www.zerochan.net).
