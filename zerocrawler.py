@@ -10,6 +10,7 @@ import re
 
 colorama.init()
 
+VERSION = "1.1"
 homesite = "https://www.zerochan.net"
 outdir = "IMAGES"
 
@@ -72,7 +73,7 @@ def getImageLink(url):
         links.append(i["href"].replace("/",""))
     return links
 
-print(f"{Style.DIM}[ {Fore.LIGHTCYAN_EX}ZEROchan CRAWLER{Fore.RESET} by {Fore.LIGHTGREEN_EX}Adhya Adam {Fore.RESET}]{Style.RESET_ALL}")
+print(f"{Style.DIM}[ {Fore.LIGHTCYAN_EX}ZEROchan CRAWLER{Fore.RESET} by {Fore.LIGHTGREEN_EX}Adhya Adam {Fore.RESET}]{Style.RESET_ALL} v{VERSION}")
 print(f"{Fore.LIGHTYELLOW_EX}A program that will download wallpaper with given query from zerochan.{Fore.RESET}")
 
 def search_tag(tag_query):
