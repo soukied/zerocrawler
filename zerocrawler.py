@@ -7,6 +7,8 @@ import colorama
 from colorama import Fore, Style
 import urllib.parse
 import re
+import ctypes
+
 
 colorama.init()
 
@@ -15,6 +17,8 @@ homesite = "https://www.zerochan.net"
 outdir = "IMAGES"
 
 last_filename = None
+
+ctypes.windll.kernel32.SetConsoleTitleW(f"Zerocrawner v{VERSION}")
 
 def is_exist(fn):
     return path.exists(fn) and path.isfile(fn)
