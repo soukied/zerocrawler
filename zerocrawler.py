@@ -3,8 +3,12 @@ import os
 from os import path
 import requests
 import sys
+import colorama
+from colorama import Fore, Style
 import urllib.parse
 import re
+
+colorama.init()
 
 homesite = "https://www.zerochan.net"
 outdir = "IMAGES"
@@ -24,8 +28,7 @@ def getPages():
     try:
         digit = p.get_text("|").split("|")[0].strip().split(" ")[3].split(",")
     except:
-        print("[*] No image found.")
-        exit()
+        return sys.maxsize
     for i in digit:
         num += i
     return int(num)
@@ -40,12 +43,12 @@ def downloadFile(url,name):
     filename = path.basename(url)
     print("[*] Downloading \"" + name + "\" image...")
     if is_exist(outdir + "/" + filename):
-        print("[*] File with same name exist, the program will skip this step.")
+        print(Fore.YELLOW + "[*] File with same name exist, the program will skip this step." + Fore.RESET)
         return
     with open(outdir + "/" + filename, "wb") as f:
         last_filename = filename
         f.write(requests.get(url).content)
-    print("[*] Download completed")
+    print(Fore.LIGHTGREEN_EX + "[*] Download completed" + Fore.RESET)
     last_filename = None
 
 def getImageUrl(code):
@@ -69,28 +72,38 @@ def getImageLink(url):
         links.append(i["href"].replace("/",""))
     return links
 
-print("[ ZEROchan CRAWLER by Adhya Adam ]")
-print("A program that will download wallpaper with given query from zerochan.")
+print(f"{Style.DIM}[ {Fore.LIGHTCYAN_EX}ZEROchan CRAWLER{Fore.RESET} by {Fore.LIGHTGREEN_EX}Adhya Adam {Fore.RESET}]{Style.RESET_ALL}")
+print(f"{Fore.LIGHTYELLOW_EX}A program that will download wallpaper with given query from zerochan.{Fore.RESET}")
 print("")
 
-try:
-    s_query = urllib.parse.quote(input("Insert your search tag: "))
-    last_page = getPages()
-    if last_page == 0:
-        print("[!] Images are not found.")
+
+def search_tag(tag_query):
+    try:
+        last_page = getPages()
+        if last_page == 0:
+            print(f"{Fore.RED}[!] Images are not found.{Fore.RESET}")
+            return
+        print(f"{Fore.BLUE}[*] Proceeds to download images.{Fore.RESET}") 
+        print(f"{Fore.YELLOW}[~] Press <Ctrl> + C to stop the program.{Fore.RESET}")
+        for i in range(1, last_page + 1):
+            list_link = getImageLink(homesite + "/" + tag_query.strip() + "?p=" + str(i))
+            if len(list_link) < 1:
+                print(f"{Fore.RED}[!] Images are not found.{Fore.RESET}")
+                return
+            for i in list_link:
+                getImageUrl(i)
+    except KeyboardInterrupt:
+        if last_filename != None and path.exists("images/"+last_filename) and path.isfile("images/"+last_filename):
+            os.remove("images/" + last_filename)
+        print(f"{Fore.YELLOW}[!] Quitting the progress.{Fore.RESET}")
+    except:
+        print(f"{Fore.RED}[!] Unexpexted error occured, progress will automatically stop.{Fore.RESET}")
+        
+while True:
+    try:
+        tag = input("Insert your search tag: ")
+        s_query = urllib.parse.quote(tag)
+    except KeyboardInterrupt:
+        print(f"\n{Fore.RED}[!] Quitting the program.{Fore.RESET}")
         exit()
-    print("[*] Proceeds to download images.") 
-    print("[~] Press <Ctrl> + C to stop thr program")
-    for i in range(1, last_page + 1):
-        list_link = getImageLink(homesite + "/" + s_query.strip() + "?p=" + str(i))
-        if len(list_link) < 1:
-            print("[!] No image found.")
-            exit()
-        for i in list_link:
-            getImageUrl(i)
-except KeyboardInterrupt:
-    if last_filename != None and path.exists("images/"+last_filename) and path.isfile("images/"+last_filename):
-        os.remove("images/"+last_filename)
-    print("[!] Quitting the program.")
-except:
-    print("[!] Unexpexted error occured, program will automatically quit.")
+    search_tag(s_query)
