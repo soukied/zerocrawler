@@ -3,14 +3,13 @@ import os
 from os import path
 import requests
 import sys
-import colorama
-from colorama import Fore, Style
+from colorama import Fore, Style, init
 import urllib.parse
 import re
 import ctypes
 
 
-colorama.init()
+init()
 
 VERSION = "1.1"
 homesite = "https://www.zerochan.net"
@@ -77,10 +76,8 @@ def getImageLink(url):
         links.append(i["href"].replace("/",""))
     return links
 
-print(f"{Style.DIM}[ {Fore.LIGHTCYAN_EX}ZEROchan CRAWLER{Fore.RESET} by {Fore.LIGHTGREEN_EX}Adhya Adam {Fore.RESET}]{Style.RESET_ALL} v{VERSION}")
-print(f"{Fore.LIGHTYELLOW_EX}A program that will download wallpaper with given query from zerochan.{Fore.RESET}")
-
 def search_tag(tag_query):
+    file_downloaded = 0
     try:
         last_page = getPages()
         if last_page == 0:
@@ -91,9 +88,10 @@ def search_tag(tag_query):
         for i in range(1, last_page + 1):
             list_link = getImageLink(homesite + "/" + tag_query.strip() + "?p=" + str(i))
             if len(list_link) < 1:
-                print(f"{Fore.RED}[!] Images are not found.{Fore.RESET}")
+                if file_downloaded == 0: print(f"{Fore.RED}[!] Images are not found.{Fore.RESET}")
                 return
             for i in list_link:
+                file_downloaded = file_downloaded + 1
                 getImageUrl(i)
     except KeyboardInterrupt:
         if last_filename != None and path.exists("images/"+last_filename) and path.isfile("images/"+last_filename):
@@ -101,6 +99,10 @@ def search_tag(tag_query):
         print(f"{Fore.LIGHTYELLOW_EX}[!] Quitting the progress.{Fore.RESET}")
     except:
         print(f"{Fore.RED}[!] Unexpexted error occured, progress will automatically stop.{Fore.RESET}")
+
+print(f"{Style.DIM}[ {Fore.LIGHTCYAN_EX}ZEROchan CRAWLER{Fore.RESET} by {Fore.LIGHTGREEN_EX}Adhya Adam {Fore.RESET}]{Style.RESET_ALL} v{VERSION}")
+print(f"{Fore.LIGHTYELLOW_EX}A program that will download wallpaper with given query from zerochan.{Fore.RESET}")
+
         
 while True:
     try:
