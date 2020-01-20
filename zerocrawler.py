@@ -11,7 +11,7 @@ import ctypes
 
 init()
 
-VERSION = "1.1"
+VERSION = "1.2"
 homesite = "https://www.zerochan.net"
 outdir = "IMAGES"
 
