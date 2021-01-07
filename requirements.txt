@@ -1,4 +1,4 @@
-lxml==4.4.2
+lxml==4.6.2
 colorama==0.4.1
 PyInstaller==3.6
 pefile==2019.4.18
